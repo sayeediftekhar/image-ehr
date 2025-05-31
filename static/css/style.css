@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAGE EHR - Login</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <h1>IMAGE EHR</h1>
+                <p>Multi-Clinic Management System</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+                
+                <div id="error-message" class="error-message" style="display: none;"></div>
+            </form>
+            
+            <div class="demo-credentials">
+                <h3>Demo Credentials:</h3>
+                <div class="credential-item">
+                    <strong>Admin:</strong> admin / admin123
+                </div>
+                <div class="credential-item">
+                    <strong>Nasirabad Manager:</strong> manager_cl1 / manager123
+                </div>
+                <div class="credential-item">
+                    <strong>EMOC Staff:</strong> emoc_cl1 / emoc123
+                </div>
+                <div class="credential-item">
+                    <strong>Counselor:</strong> counselor_cl1 / outdoor123
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

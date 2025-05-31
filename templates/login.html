@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>IMAGE EHR - Login</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/static/css/login.css" />
+    </head>
+    <body>
+        <div class="login-wrapper">
+            <!-- Background Image -->
+            <div class="background-image"></div>
+            <div class="background-overlay"></div>
+
+            <!-- Login Container -->
+            <div class="login-container">
+                <div class="login-card">
+                    <!-- Logo Section -->
+                    <div class="logo-section">
+                        <div class="logo-icon">
+                            <img
+                                src="/static/images/logo.png"
+                                alt="IMAGE EHR Logo"
+                                class="logo-image"
+                            />
+                        </div>
+                        <h1 class="logo-text">IMAGE EHR</h1>
+                        <p class="logo-subtitle">
+                            Multi-Clinic Management System
+                        </p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="login-form">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                required
+                                placeholder="Enter your username"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                required
+                                placeholder="Enter your password"
+                            />
+                        </div>
+
+                        <button type="submit" class="login-btn">
+                            <span class="btn-text">Sign In</span>
+                            <div class="btn-loader" style="display: none">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+
+                        <div
+                            id="error-message"
+                            class="error-message"
+                            style="display: none"
+                        ></div>
+                    </form>
+
+                    <!-- Demo Credentials -->
+                    <div class="demo-section">
+                        <div class="demo-header">
+                            <span>Demo Accounts</span>
+                        </div>
+                        <div class="demo-grid">
+                            <div
+                                class="demo-item"
+                                onclick="fillCredentials('admin', 'admin123')"
+                            >
+                                <div class="demo-role">System Admin</div>
+                                <div class="demo-creds">admin / admin123</div>
+                            </div>
+                            <div
+                                class="demo-item"
+                                onclick="fillCredentials('manager_cl1', 'manager123')"
+                            >
+                                <div class="demo-role">Clinic Manager</div>
+                                <div class="demo-creds">
+                                    manager_cl1 / manager123
+                                </div>
+                            </div>
+                            <div
+                                class="demo-item"
+                                onclick="fillCredentials('emoc_cl1', 'emoc123')"
+                            >
+                                <div class="demo-role">EMOC Staff</div>
+                                <div class="demo-creds">emoc_cl1 / emoc123</div>
+                            </div>
+                            <div
+                                class="demo-item"
+                                onclick="fillCredentials('counselor_cl1', 'outdoor123')"
+                            >
+                                <div class="demo-role">Counselor</div>
+                                <div class="demo-creds">
+                                    counselor_cl1 / outdoor123
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/static/js/login.js"></script>
+    </body>
+</html>

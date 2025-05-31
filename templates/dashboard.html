@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>IMAGE EHR - Dashboard</title>
+        <link rel="stylesheet" href="/static/css/dashboard.css" />
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1>IMAGE EHR</h1>
+                    <span id="clinic-name">Loading...</span>
+                </div>
+                <div class="header-right">
+                    <span id="user-info">Loading...</span>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <div class="nav-item active" data-section="overview">
+                        <span>📊 Overview</span>
+                    </div>
+                    <div class="nav-item" data-section="patients">
+                        <span>👥 Patients</span>
+                    </div>
+                    <div
+                        class="nav-item emoc-only"
+                        data-section="emoc"
+                        style="display: none"
+                    >
+                        <span>🏥 EMOC</span>
+                    </div>
+                    <div class="nav-item" data-section="billing">
+                        <span>💰 Billing</span>
+                    </div>
+                    <div
+                        class="nav-item admin-only"
+                        data-section="users"
+                        style="display: none"
+                    >
+                        <span>👤 Users</span>
+                    </div>
+                    <div
+                        class="nav-item admin-only"
+                        data-section="clinics"
+                        style="display: none"
+                    >
+                        <span>🏢 Clinics</span>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Overview Section -->
+                <section id="overview-section" class="content-section active">
+                    <h2>Dashboard Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Patients</h3>
+                            <div class="stat-number" id="total-patients">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Today's Appointments</h3>
+                            <div class="stat-number" id="today-appointments">
+                                0
+                            </div>
+                        </div>
+                        <div class="stat-card emoc-only" style="display: none">
+                            <h3>EMOC Cases</h3>
+                            <div class="stat-number" id="emoc-cases">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Revenue This Month</h3>
+                            <div class="stat-number" id="monthly-revenue">
+                                ৳0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activity-list">
+                            <div class="activity-item">
+                                <span class="activity-time">10:30 AM</span>
+                                <span class="activity-desc"
+                                    >New patient registered: Sarah Ahmed</span
+                                >
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">09:15 AM</span>
+                                <span class="activity-desc"
+                                    >EMOC case admitted: Emergency
+                                    delivery</span
+                                >
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">08:45 AM</span>
+                                <span class="activity-desc"
+                                    >Payment received: ৳2,500</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Patients Section -->
+                <section id="patients-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Patient Management</h2>
+                        <button class="btn-primary" id="add-patient-btn">
+                            Add New Patient
+                        </button>
+                    </div>
+
+                    <div class="search-bar">
+                        <input
+                            type="text"
+                            id="patient-search"
+                            placeholder="Search patients..."
+                        />
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Phone</th>
+                                    <th>Last Visit</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patients-table-body">
+                                <tr>
+                                    <td>P001</td>
+                                    <td>Sarah Ahmed</td>
+                                    <td>28</td>
+                                    <td>01712345678</td>
+                                    <td>2024-05-30</td>
+                                    <td>
+                                        <button class="btn-small">View</button>
+                                        <button class="btn-small">Edit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- EMOC Section -->
+                <section id="emoc-section" class="content-section">
+                    <div class="section-header">
+                        <h2>EMOC Management</h2>
+                        <button class="btn-primary" id="add-emoc-btn">
+                            New EMOC Case
+                        </button>
+                    </div>
+
+                    <div class="emoc-stats">
+                        <div class="emoc-stat">
+                            <h4>Active Cases</h4>
+                            <span class="emoc-number">3</span>
+                        </div>
+                        <div class="emoc-stat">
+                            <h4>Deliveries Today</h4>
+                            <span class="emoc-number">2</span>
+                        </div>
+                        <div class="emoc-stat">
+                            <h4>Emergency Cases</h4>
+                            <span class="emoc-number">1</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Case ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Admission Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="emoc-table-body">
+                                <tr>
+                                    <td>EMOC001</td>
+                                    <td>Fatima Khan</td>
+                                    <td>Normal Delivery</td>
+                                    <td>
+                                        <span class="status active"
+                                            >Active</span
+                                        >
+                                    </td>
+                                    <td>2024-05-31 08:30</td>
+                                    <td>
+                                        <button class="btn-small">View</button>
+                                        <button class="btn-small">
+                                            Update
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Billing Section -->
+                <section id="billing-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Billing & Payments</h2>
+                        <button class="btn-primary" id="add-bill-btn">
+                            Create Bill
+                        </button>
+                    </div>
+
+                    <div class="billing-summary">
+                        <div class="billing-card">
+                            <h4>Today's Revenue</h4>
+                            <span class="amount">৳15,500</span>
+                        </div>
+                        <div class="billing-card">
+                            <h4>Pending Payments</h4>
+                            <span class="amount">৳8,200</span>
+                        </div>
+                        <div class="billing-card">
+                            <h4>Monthly Total</h4>
+                            <span class="amount">৳125,000</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bill ID</th>
+                                    <th>Patient</th>
+                                    <th>Service</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="billing-table-body">
+                                <tr>
+                                    <td>B001</td>
+                                    <td>Sarah Ahmed</td>
+                                    <td>Consultation</td>
+                                    <td>৳500</td>
+                                    <td>
+                                        <span class="status paid">Paid</span>
+                                    </td>
+                                    <td>2024-05-31</td>
+                                    <td>
+                                        <button class="btn-small">View</button>
+                                        <button class="btn-small">Print</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Users Section (Admin Only) -->
+                <section id="users-section" class="content-section">
+                    <div class="section-header">
+                        <h2>User Management</h2>
+                        <button class="btn-primary" id="add-user-btn">
+                            Add New User
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Role</th>
+                                    <th>Clinic</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td>admin</td>
+                                    <td>System Administrator</td>
+                                    <td>Admin</td>
+                                    <td>All Clinics</td>
+                                    <td>
+                                        <span class="status active"
+                                            >Active</span
+                                        >
+                                    </td>
+                                    <td>
+                                        <button class="btn-small">Edit</button>
+                                        <button class="btn-small">
+                                            Disable
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Clinics Section (Admin Only) -->
+                <section id="clinics-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Clinic Management</h2>
+                        <button class="btn-primary" id="add-clinic-btn">
+                            Add New Clinic
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Clinic Name</th>
+                                    <th>Location</th>
+                                    <th>Phone</th>
+                                    <th>Patients</th>
+                                    <th>Staff</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clinics-table-body">
+                                <tr>
+                                    <td>Nasirabad Clinic</td>
+                                    <td>Nasirabad, Chittagong</td>
+                                    <td>01711111111</td>
+                                    <td>25</td>
+                                    <td>5</td>
+                                    <td>
+                                        <button class="btn-small">View</button>
+                                        <button class="btn-small">Edit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <script src="/static/js/dashboard.js"></script>
+    </body>
+</html>
