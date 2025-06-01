@@ -81,6 +81,22 @@ body {
     flex-direction: column;
 }
 
+/* Admin section styling */
+.nav-section-divider {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 15px 0;
+}
+
+.nav-section-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+    padding: 5px 15px;
+    margin-bottom: 5px;
+}
+
 .nav-item {
     padding: 15px 20px;
     cursor: pointer;
@@ -293,6 +309,16 @@ body {
     color: #856404;
 }
 
+.status.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
 /* EMOC Stats */
 .emoc-stats {
     display: grid;
@@ -311,69 +337,4 @@ body {
 
 .emoc-stat h4 {
     color: #666;
-    font-size: 0.9em;
-    margin-bottom: 8px;
-}
-
-.emoc-number {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: #e74c3c;
-}
-
-/* Billing Summary */
-.billing-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.billing-card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.billing-card h4 {
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 10px;
-}
-
-.amount {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: #27ae60;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .dashboard-container {
-        grid-template-areas:
-            "header"
-            "main";
-        grid-template-columns: 1fr;
-        grid-template-rows: 60px 1fr;
-    }
-
-    .sidebar {
-        display: none;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .table-container {
-        overflow-x: auto;
-    }
-}
+    font-size: 0.9em

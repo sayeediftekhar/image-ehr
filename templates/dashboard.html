@@ -7,39 +7,28 @@
         <link rel="stylesheet" href="/static/css/dashboard.css" />
     </head>
     <body>
-        <!-- Top Navigation Bar -->
-        <nav class="top-nav">
-            <a href="/dashboard">🏠 Dashboard</a> |
-            <a href="/admin/users">User Management</a> |
-            <a href="/admin/login-logs">Login Logs</a>
-            <span style="float: right">
-                <span id="user-info">
-                    {% if request.session.user %} {{
-                    request.session.user.full_name }} ({{
-                    request.session.user.role|capitalize }}) {% else %} Guest {%
-                    endif %}
-                </span>
-                <button
-                    id="logout-btn"
-                    class="logout-btn"
-                    onclick="window.location.href='/logout'"
-                >
-                    Logout
-                </button>
-            </span>
-        </nav>
-
         <div class="dashboard-container">
             <!-- Header -->
             <header class="header">
                 <div class="header-left">
                     <h1>IMAGE EHR</h1>
                     <span id="clinic-name">
-                        {% if request.session.user and
-                        request.session.user.clinic_name %} {{
-                        request.session.user.clinic_name }} {% else %} All
-                        Clinics {% endif %}
+                        {% if user and user.clinic_name %} {{ user.clinic_name
+                        }} {% else %} All Clinics {% endif %}
                     </span>
+                </div>
+                <div class="header-right">
+                    <span id="user-info">
+                        {% if user %} {{ user.full_name }} ({{
+                        user.role|capitalize }}) {% else %} Guest {% endif %}
+                    </span>
+                    <button
+                        id="logout-btn"
+                        class="logout-btn"
+                        onclick="window.location.href='/logout'"
+                    >
+                        Logout
+                    </button>
                 </div>
             </header>
 
@@ -52,30 +41,27 @@
                     <div class="nav-item" data-section="patients">
                         <span>👥 Patients</span>
                     </div>
-                    <div
-                        class="nav-item emoc-only"
-                        data-section="emoc"
-                        style="display: none"
-                    >
+                    <div class="nav-item" data-section="emoc">
                         <span>🏥 EMOC</span>
                     </div>
                     <div class="nav-item" data-section="billing">
                         <span>💰 Billing</span>
                     </div>
-                    <div
-                        class="nav-item admin-only"
-                        data-section="users"
-                        style="display: none"
-                    >
-                        <span>👤 Users</span>
+
+                    <!-- Admin Section - Only show if user is admin -->
+                    {% if user and user.role == 'admin' %}
+                    <div class="nav-section-divider"></div>
+                    <div class="nav-section-title">Admin</div>
+                    <div class="nav-item" data-section="users">
+                        <span>👤 User Management</span>
                     </div>
-                    <div
-                        class="nav-item admin-only"
-                        data-section="clinics"
-                        style="display: none"
-                    >
+                    <div class="nav-item" data-section="login-logs">
+                        <span>📋 Login Logs</span>
+                    </div>
+                    <div class="nav-item" data-section="clinics">
                         <span>🏢 Clinics</span>
                     </div>
+                    {% endif %}
                 </nav>
             </aside>
 
@@ -87,22 +73,25 @@
                     <div class="stats-grid">
                         <div class="stat-card">
                             <h3>Total Patients</h3>
-                            <div class="stat-number" id="total-patients">0</div>
+                            <div class="stat-number" id="total-patients">
+                                {{ total_patients if total_patients is defined
+                                else 156 }}
+                            </div>
                         </div>
                         <div class="stat-card">
                             <h3>Today's Appointments</h3>
                             <div class="stat-number" id="today-appointments">
-                                0
+                                12
                             </div>
                         </div>
-                        <div class="stat-card emoc-only" style="display: none">
+                        <div class="stat-card">
                             <h3>EMOC Cases</h3>
-                            <div class="stat-number" id="emoc-cases">0</div>
+                            <div class="stat-number" id="emoc-cases">3</div>
                         </div>
                         <div class="stat-card">
                             <h3>Revenue This Month</h3>
                             <div class="stat-number" id="monthly-revenue">
-                                ৳0
+                                ৳125,000
                             </div>
                         </div>
                     </div>
@@ -126,6 +115,18 @@
                                 <span class="activity-time">08:45 AM</span>
                                 <span class="activity-desc"
                                     >Payment received: ৳2,500</span
+                                >
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">08:30 AM</span>
+                                <span class="activity-desc"
+                                    >User login: manager_cl1</span
+                                >
+                            </div>
+                            <div class="activity-item">
+                                <span class="activity-time">08:00 AM</span>
+                                <span class="activity-desc"
+                                    >System backup completed</span
                                 >
                             </div>
                         </div>
@@ -325,6 +326,44 @@
                                             Disable
                                         </button>
                                     </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Login Logs Section (Admin Only) -->
+                <section id="login-logs-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Login Logs</h2>
+                        <button class="btn-primary" id="refresh-logs-btn">
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Login Time</th>
+                                    <th>IP Address</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>User Agent</th>
+                                </tr>
+                            </thead>
+                            <tbody id="login-logs-table-body">
+                                <tr>
+                                    <td>admin</td>
+                                    <td>2024-06-01 10:30:15</td>
+                                    <td>192.168.1.100</td>
+                                    <td>Chittagong, Bangladesh</td>
+                                    <td>
+                                        <span class="status success"
+                                            >Success</span
+                                        >
+                                    </td>
+                                    <td>Chrome/Safari</td>
                                 </tr>
                             </tbody>
                         </table>

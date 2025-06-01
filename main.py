@@ -241,10 +241,43 @@ async def login(request: Request, credentials: UserCredentials):
 
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard(request: Request):
-    # Optionally, you can protect the dashboard as well:
-    # if "user" not in request.session:
-    #     return RedirectResponse("/login")
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+    # Check if user is logged in
+    user = request.session.get("user")
+    if not user:
+        return RedirectResponse("/login")
+    
+    # Get some basic stats for the dashboard
+    conn = get_db_connection()
+    total_patients = 0
+    total_login_logs = 0
+    
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM patients")
+            total_patients = cursor.fetchone()[0]
+            
+            cursor.execute("SELECT COUNT(*) FROM login_logs")
+            total_login_logs = cursor.fetchone()[0]
+            
+            conn.close()
+        except Exception as e:
+            logger.error(f"Error fetching dashboard stats: {e}")
+    
+    return templates.TemplateResponse(
+        "dashboard.html", 
+        {
+            "request": request, 
+            "user": user,
+            "total_patients": total_patients,
+            "total_login_logs": total_login_logs
+        }
+    )
+
+@app.get("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/login")
 
 @app.get("/admin/users", response_class=HTMLResponse)
 def admin_users(request: Request):
