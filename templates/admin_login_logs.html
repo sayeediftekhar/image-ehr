@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>IMAGE EHR - Login Logs</title>
+        <link rel="stylesheet" href="/static/css/admin.css" />
+    </head>
+    <body>
+        <div class="admin-container">
+            <header>
+                <h1>Login Logs</h1>
+                <nav>
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/admin/users">Users</a>
+                    <a href="/admin/login-logs" class="active">Login Logs</a>
+                </nav>
+            </header>
+
+            <main>
+                <div class="table-container">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Login Time</th>
+                                <th>IP Address</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>User Agent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>{{ log.username }}</td>
+                                <td>
+                                    {{ log.login_time.strftime('%Y-%m-%d
+                                    %H:%M:%S') }}
+                                </td>
+                                <td>{{ log.ip_address }}</td>
+                                <td>
+                                    {% if log.city and log.country %} {{
+                                    log.city }}, {{ log.country }} {% else %}
+                                    Unknown {% endif %}
+                                </td>
+                                <td>
+                                    <span
+                                        class="status-badge status-{{ 'success' if log.success else 'failed' }}"
+                                    >
+                                        {{ 'Success' if log.success else
+                                        'Failed' }}
+                                    </span>
+                                </td>
+                                <td class="user-agent">
+                                    {{ log.user_agent[:50] }}...
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

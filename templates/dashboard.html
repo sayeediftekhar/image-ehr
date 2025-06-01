@@ -7,16 +7,39 @@
         <link rel="stylesheet" href="/static/css/dashboard.css" />
     </head>
     <body>
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <a href="/dashboard">🏠 Dashboard</a> |
+            <a href="/admin/users">User Management</a> |
+            <a href="/admin/login-logs">Login Logs</a>
+            <span style="float: right">
+                <span id="user-info">
+                    {% if request.session.user %} {{
+                    request.session.user.full_name }} ({{
+                    request.session.user.role|capitalize }}) {% else %} Guest {%
+                    endif %}
+                </span>
+                <button
+                    id="logout-btn"
+                    class="logout-btn"
+                    onclick="window.location.href='/logout'"
+                >
+                    Logout
+                </button>
+            </span>
+        </nav>
+
         <div class="dashboard-container">
             <!-- Header -->
             <header class="header">
                 <div class="header-left">
                     <h1>IMAGE EHR</h1>
-                    <span id="clinic-name">Loading...</span>
-                </div>
-                <div class="header-right">
-                    <span id="user-info">Loading...</span>
-                    <button id="logout-btn" class="logout-btn">Logout</button>
+                    <span id="clinic-name">
+                        {% if request.session.user and
+                        request.session.user.clinic_name %} {{
+                        request.session.user.clinic_name }} {% else %} All
+                        Clinics {% endif %}
+                    </span>
                 </div>
             </header>
 
@@ -83,7 +106,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="recent-activity">
                         <h3>Recent Activity</h3>
                         <div class="activity-list" id="activity-list">
@@ -118,7 +140,6 @@
                             Add New Patient
                         </button>
                     </div>
-
                     <div class="search-bar">
                         <input
                             type="text"
@@ -126,7 +147,6 @@
                             placeholder="Search patients..."
                         />
                     </div>
-
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -164,7 +184,6 @@
                             New EMOC Case
                         </button>
                     </div>
-
                     <div class="emoc-stats">
                         <div class="emoc-stat">
                             <h4>Active Cases</h4>
@@ -179,7 +198,6 @@
                             <span class="emoc-number">1</span>
                         </div>
                     </div>
-
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -223,7 +241,6 @@
                             Create Bill
                         </button>
                     </div>
-
                     <div class="billing-summary">
                         <div class="billing-card">
                             <h4>Today's Revenue</h4>
@@ -238,7 +255,6 @@
                             <span class="amount">৳125,000</span>
                         </div>
                     </div>
-
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -280,7 +296,6 @@
                             Add New User
                         </button>
                     </div>
-
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -324,7 +339,6 @@
                             Add New Clinic
                         </button>
                     </div>
-
                     <div class="table-container">
                         <table class="data-table">
                             <thead>
@@ -355,7 +369,6 @@
                 </section>
             </main>
         </div>
-
         <script src="/static/js/dashboard.js"></script>
     </body>
 </html>
