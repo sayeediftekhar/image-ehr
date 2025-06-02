@@ -37,7 +37,7 @@
                     </div>
 
                     <!-- Login Form -->
-                    <form id="loginForm" class="login-form">
+                    <form method="post" action="/login" class="login-form">
                         <div class="form-group">
                             <label for="username">Username</label>
                             <input
@@ -67,11 +67,17 @@
                             </div>
                         </button>
 
+                        {% if error %}
+                        <div class="error-message" style="display: block">
+                            {{ error }}
+                        </div>
+                        {% else %}
                         <div
                             id="error-message"
                             class="error-message"
                             style="display: none"
                         ></div>
+                        {% endif %}
                     </form>
 
                     <!-- Demo Credentials -->
