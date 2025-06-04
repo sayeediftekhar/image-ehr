@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ patient.name }} - Patient Details - IMAGE EHR</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-hospital"></i> IMAGE EHR</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/patients" class="nav-item active">
+                    <i class="fas fa-user-injured"></i> Patients
+                </a>
+                <a href="/billing" class="nav-item">
+                    <i class="fas fa-dollar-sign"></i> Billing
+                </a>
+                <a href="/admin/users" class="nav-item">
+                    <i class="fas fa-users"></i> Admin
+                </a>
+                <a href="/logout" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="header-left">
+                    <a href="/patients" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Patients
+                    </a>
+                    <h1><i class="fas fa-user"></i> {{ patient.name }}</h1>
+                </div>
+                <div class="header-actions">
+                    <a href="/patients/{{ patient.id }}/edit" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Patient
+                    </a>
+                    <button class="btn btn-success" onclick="addVisit()">
+                        <i class="fas fa-plus"></i> New Visit
+                    </button>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Patient Info Cards -->
+                <div class="patient-info-grid">
+                    <!-- Basic Info Card -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user"></i> Basic Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-row">
+                                <span class="label">Patient ID:</span>
+                                <span class="value">{{ patient.patient_id }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Full Name:</span>
+                                <span class="value">{{ patient.name }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Age:</span>
+                                <span class="value">{{ patient.age }} years</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Gender:</span>
+                                <span class="value">{{ patient.gender }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Clinic:</span>
+                                <span class="value">{{ patient.clinic_name }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info Card -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-phone"></i> Contact Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-row">
+                                <span class="label">Phone:</span>
+                                <span class="value">{{ patient.phone or 'Not provided' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Address:</span>
+                                <span class="value">{{ patient.address or 'Not provided' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Emergency Contact:</span>
+                                <span class="value">{{ patient.emergency_contact or 'Not provided' }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Emergency Phone:</span>
+                                <span class="value">{{ patient.emergency_phone or 'Not provided' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Registration Info Card -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar"></i> Registration Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-row">
+                                <span class="label">Registered:</span>
+                                <span class="value">{{ patient.created_at.strftime('%B %d, %Y at %I:%M %p') if patient.created_at else 'Unknown' }}</span>
+                            </div>
+                            {% if patient.updated_at %}
+                            <div class="info-row">
+                                <span class="label">Last Updated:</span>
+                                <span class="value">{{ patient.updated_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="info-row">
+                                <span class="label">Total Visits:</span>
+                                <span class="value">{{ visits|length }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visit History -->
+                <div class="visits-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-history"></i> Visit History</h2>
+                        <button class="btn btn-primary" onclick="addVisit()">
+                            <i class="fas fa-plus"></i> Add Visit
+                        </button>
+                    </div>
+
+                    {% if visits %}
+                        <div class="visits-timeline">
+                            {% for visit in visits %}
+                            <div class="visit-card">
+                                <div class="visit-header">
+                                    <div class="visit-date">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ visit.visit_date.strftime('%B %d, %Y') if visit.visit_date else 'Unknown Date' }}
+                                    </div>
+                                    <div class="visit-doctor">
+                                        <i class="fas fa-user-md"></i>
+                                        Dr. {{ visit.doctor_name }}
+                                    </div>
+                                </div>
+                                <div class="visit-content">
+                                    {% if visit.diagnosis %}
+                                    <div class="visit-field">
+                                        <strong>Diagnosis:</strong>
+                                        <p>{{ visit.diagnosis }}</p>
+                                    </div>
+                                    {% endif %}
+                                    {% if visit.treatment %}
+                                    <div class="visit-field">
+                                        <strong>Treatment:</strong>
+                                        <p>{{ visit.treatment }}</p>
+                                    </div>
+                                    {% endif %}
+                                    {% if visit.notes %}
+                                    <div class="visit-field">
+                                        <strong>Notes:</strong>
+                                        <p>{{ visit.notes }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="no-visits">
+                            <i class="fas fa-info-circle"></i>
+                            <p>No visits recorded yet.</p>
+                            <button class="btn btn-primary" onclick="addVisit()">
+                                <i class="fas fa-plus"></i> Record First Visit
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addVisit() {
+            // For now, just show an alert - we'll implement this later
+            alert('Visit recording feature coming soon!');
+        }
+    </script>
+</body>
+</html>
