@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Visit - {{ patient.name }} - IMAGE EHR</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-hospital"></i> IMAGE EHR</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/patients" class="nav-item active">
+                    <i class="fas fa-user-injured"></i> Patients
+                </a>
+                <a href="/billing" class="nav-item">
+                    <i class="fas fa-dollar-sign"></i> Billing
+                </a>
+                <a href="/admin/users" class="nav-item">
+                    <i class="fas fa-users"></i> Admin
+                </a>
+                <a href="/logout" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-plus-circle"></i> New Visit
+                    <span class="patient-info">{{ patient.name }} (ID: {{ patient.patient_id }})</span>
+                </h1>
+                <div class="user-info">
+                    <span>Welcome, {{ user.full_name }}</span>
+                    <span class="role-badge {{ user.role }}">{{ user.role.title() }}</span>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Visit Form -->
+                <div class="form-container">
+                    <form action="/patients/{{ patient.id }}/visit/create" method="post" class="visit-form">
+                        <!-- Basic Visit Information -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-calendar"></i> Visit Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="visit_date">Visit Date *</label>
+                                    <input type="date" id="visit_date" name="visit_date" required 
+                                           value="{{ today }}" max="{{ today }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="visit_type">Visit Type</label>
+                                    <select id="visit_type" name="visit_type">
+                                        <option value="consultation">Consultation</option>
+                                        <option value="follow-up">Follow-up</option>
+                                        <option value="emergency">Emergency</option>
+                                        <option value="routine_checkup">Routine Checkup</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chief Complaint -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-comment-medical"></i> Chief Complaint</h3>
+                            <div class="form-group">
+                                <label for="chief_complaint">What brings the patient in today?</label>
+                                <textarea id="chief_complaint" name="chief_complaint" rows="3" 
+                                          placeholder="Patient's main concern or reason for visit..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Vital Signs -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-heartbeat"></i> Vital Signs</h3>
+                            <div class="vitals-grid">
+                                <div class="form-group">
+                                    <label for="blood_pressure">Blood Pressure</label>
+                                    <input type="text" id="blood_pressure" name="blood_pressure" 
+                                           placeholder="120/80">
+                                </div>
+                                <div class="form-group">
+                                    <label for="temperature">Temperature (°F)</label>
+                                    <input type="text" id="temperature" name="temperature" 
+                                           placeholder="98.6">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pulse">Pulse (bpm)</label>
+                                    <input type="number" id="pulse" name="pulse" 
+                                           placeholder="72">
+                                </div>
+                                <div class="form-group">
+                                    <label for="weight">Weight (kg)</label>
+                                    <input type="number" id="weight" name="weight" step="0.1"
+                                           placeholder="70.0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="height">Height (cm)</label>
+                                    <input type="number" id="height" name="height"
+                                           placeholder="170">
+                                </div>
+                                <div class="form-group">
+                                    <label for="oxygen_saturation">Oxygen Saturation (%)</label>
+                                    <input type="number" id="oxygen_saturation" name="oxygen_saturation" 
+                                           min="0" max="100" placeholder="98">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Clinical Assessment -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-stethoscope"></i> Clinical Assessment</h3>
+                            <div class="form-group">
+                                <label for="diagnosis">Diagnosis *</label>
+                                <textarea id="diagnosis" name="diagnosis" rows="3" required
+                                          placeholder="Primary and secondary diagnoses..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="treatment">Treatment Plan *</label>
+                                <textarea id="treatment" name="treatment" rows="4" required
+                                          placeholder="Treatment recommendations, medications, procedures..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Additional Notes -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-notes-medical"></i> Additional Notes</h3>
+                            <div class="form-group">
+                                <label for="notes">Clinical Notes</label>
+                                <textarea id="notes" name="notes" rows="4"
+                                          placeholder="Additional observations, patient instructions, follow-up plans..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="follow_up_date">Follow-up Date</label>
+                                <input type="date" id="follow_up_date" name="follow_up_date" 
+                                       min="{{ today }}">
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Visit
+                            </button>
+                            <a href="/patients/{{ patient.id }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('visit_date').value = today;
+        });
+
+        // Auto-calculate BMI if height and weight are provided
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // convert cm to m
+
+            if (weight && height) {
+                const bmi = (weight / (height * height)).toFixed(1);
+                // You could add a BMI display field here
+                console.log('BMI:', bmi);
+            }
+        }
+
+        document.getElementById('weight').addEventListener('input', calculateBMI);
+        document.getElementById('height').addEventListener('input', calculateBMI);
+    </script>
+</body>
+</html>

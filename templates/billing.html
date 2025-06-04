@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Billing & Payments - IMAGE EHR</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', path='css/dashboard.css') }}"
+        />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2><i class="fas fa-hospital"></i> IMAGE EHR</h2>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="/dashboard" class="nav-item">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="/billing" class="nav-item active">
+                        <i class="fas fa-dollar-sign"></i> Billing & Payments
+                    </a>
+                    <a href="/admin/users" class="nav-item">
+                        <i class="fas fa-users"></i> User Management
+                    </a>
+                    <a href="/logout" class="nav-item">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="header">
+                    <h1>
+                        <i class="fas fa-dollar-sign"></i> Billing & Payments
+                    </h1>
+                    <div class="user-info">
+                        <span>Welcome, {{ user.full_name }}</span>
+                        <span class="role-badge {{ user.role }}"
+                            >{{ user.role.title() }}</span
+                        >
+                    </div>
+                </div>
+
+                <div class="content">
+                    <!-- Analytics Cards -->
+                    <div class="analytics-grid">
+                        <div class="analytics-card revenue">
+                            <div class="card-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Today's Revenue</h3>
+                                <p class="card-value">
+                                    ${{ "%.2f"|format(today_revenue) }}
+                                </p>
+                                <span class="card-change positive"
+                                    >Daily earnings</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="analytics-card pending">
+                            <div class="card-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Pending Payments</h3>
+                                <p class="card-value">
+                                    ${{ "%.2f"|format(pending_payments) }}
+                                </p>
+                                <span class="card-change neutral"
+                                    >Awaiting payment</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="analytics-card monthly">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Monthly Total</h3>
+                                <p class="card-value">
+                                    ${{ "%.2f"|format(monthly_total) }}
+                                </p>
+                                <span class="card-change positive"
+                                    >This month</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="analytics-card bills">
+                            <div class="card-icon">
+                                <i class="fas fa-file-invoice"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Recent Bills</h3>
+                                <p class="card-value">{{ bills|length }}</p>
+                                <span class="card-change neutral"
+                                    >Last 10 bills</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bills Table -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h2>Recent Bills</h2>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> New Bill
+                            </button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bill ID</th>
+                                    <th>Patient</th>
+                                    <th>Service</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bill in bills %}
+                                <tr>
+                                    <td>#{{ bill.id }}</td>
+                                    <td>{{ bill.patient_name }}</td>
+                                    <td>{{ bill.service }}</td>
+                                    <td>${{ "%.2f"|format(bill.amount) }}</td>
+                                    <td>
+                                        <span
+                                            class="status-badge {{ bill.status }}"
+                                        >
+                                            {{ bill.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ bill.date.strftime('%Y-%m-%d') if
+                                        bill.date else 'N/A' }}
+                                    </td>
+                                    <td>
+                                        <button
+                                            class="btn btn-sm btn-secondary"
+                                        >
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

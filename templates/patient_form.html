@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if patient %}Edit Patient{% else %}New Patient Registration{% endif %} - IMAGE EHR</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-hospital"></i> IMAGE EHR</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/patients" class="nav-item active">
+                    <i class="fas fa-user-injured"></i> Patients
+                </a>
+                <a href="/billing" class="nav-item">
+                    <i class="fas fa-dollar-sign"></i> Billing
+                </a>
+                <a href="/admin/users" class="nav-item">
+                    <i class="fas fa-users"></i> Admin
+                </a>
+                <a href="/logout" class="nav-item">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>
+                    <i class="fas fa-user-plus"></i> 
+                    {% if patient %}Edit Patient{% else %}New Patient Registration{% endif %}
+                </h1>
+                <div class="user-info">
+                    <span>Welcome, {{ user.full_name }}</span>
+                    <span class="role-badge {{ user.role }}">{{ user.role.title() }}</span>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="form-container">
+                    <form method="POST" action="{% if patient %}/patients/{{ patient.id }}/update{% else %}/patients/create{% endif %}" class="patient-form">
+                        <div class="form-section">
+                            <h3><i class="fas fa-user"></i> Basic Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="name">Full Name *</label>
+                                    <input type="text" id="name" name="name" value="{{ patient.name if patient else '' }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="age">Age *</label>
+                                    <input type="number" id="age" name="age" value="{{ patient.age if patient else '' }}" min="0" max="150" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="gender">Gender *</label>
+                                    <select id="gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="Male" {% if patient and patient.gender == 'Male' %}selected{% endif %}>Male</option>
+                                        <option value="Female" {% if patient and patient.gender == 'Female' %}selected{% endif %}>Female</option>
+                    
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" value="{{ patient.phone if patient else '' }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-map-marker-alt"></i> Contact Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="address">Address</label>
+                                    <textarea id="address" name="address" rows="3">{{ patient.address if patient else '' }}</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="clinic_id">Clinic *</label>
+                                    <select id="clinic_id" name="clinic_id" required>
+                                        <option value="">Select Clinic</option>
+                                        {% for clinic in clinics %}
+                                        <option value="{{ clinic[0] }}" {% if patient and patient.clinic_id == clinic[0] %}selected{% endif %}>
+                                            {{ clinic[1] }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="emergency_contact">Emergency Contact</label>
+                                    <input type="text" id="emergency_contact" name="emergency_contact" value="{{ patient.emergency_contact if patient else '' }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergency_phone">Emergency Phone</label>
+                                    <input type="tel" id="emergency_phone" name="emergency_phone" value="{{ patient.emergency_phone if patient else '' }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3><i class="fas fa-notes-medical"></i> Medical Information</h3>
+                            <div class="form-group full-width">
+                                <label for="medical_history">Medical History</label>
+                                <textarea id="medical_history" name="medical_history" rows="4" placeholder="Previous conditions, allergies, medications, etc.">{{ patient.medical_history if patient else '' }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="/patients" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> 
+                                {% if patient %}Update Patient{% else %}Register Patient{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
